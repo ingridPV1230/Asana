@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.CLI", "Asana.CLI\Asana.CLI.csproj", "{5AB540C1-C81D-4935-A544-FB523FA2D20F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Library", "Asanna.Library\Asana.Library.csproj", "{21421989-CB8A-403B-AF7C-C733A27204F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asana.Library", "Asana.Library\Asana.Library.csproj", "{21421989-CB8A-403B-AF7C-C733A27204F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
