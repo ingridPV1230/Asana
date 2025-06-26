@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Asanna.Library/Asana.Library.csproj" />
+    <ProjectReference Include="../Asana.Library/Asana.Library.csproj" />
   </ItemGroup>
 
 </Project>
