@@ -12,6 +12,7 @@ namespace Asana
             var toDos = new List<ToDo>();
             int choiceInt;
             var itemCount = 0;
+            var toDoChoice = 0;
             do
             {
                 Console.WriteLine("Choose a menu option: ");
@@ -19,7 +20,8 @@ namespace Asana
                 Console.WriteLine("2. List all ToDos");
                 Console.WriteLine("3. List all outstanding ToDos");     // not done
                 Console.WriteLine("4. Delete A ToDo");
-                Console.WriteLine("5. Exit ");
+                Console.WriteLine("5. Update a ToDo");
+                Console.WriteLine("6. Exit ");
 
                 var choice = Console.ReadLine() ?? "5";
 
@@ -53,16 +55,32 @@ namespace Asana
                         case 4:
                             toDos.ForEach(Console.WriteLine);
                             Console.WriteLine("ToDo to Delete: ");
-                            var toDoChoice = int.Parse(Console.ReadLine() ?? "0");
+                            toDoChoice = int.Parse(Console.ReadLine() ?? "0");
 
                             var reference = toDos.FirstOrDefault(t => t.Id == toDoChoice);
                             if (reference != null)
                             {
                                 toDos.Remove(reference);
                             }
-
+                            
                             break;
                         case 5:
+                            
+                            toDos.ForEach(Console.WriteLine);
+                            Console.WriteLine("ToDo to Update: ");
+                            toDoChoice = int.Parse(Console.ReadLine() ?? "0");
+                            var updateReference = toDos.FirstOrDefault(t => t.Id == toDoChoice);
+
+                            if (updateReference != null)
+                            {
+                                Console.Write("Name: ");
+                                updateReference.Name = Console.ReadLine();
+                                Console.Write("Description: ");
+                                updateReference.Description = Console.ReadLine();
+                            }  
+
+                            break;
+                        case 6:
                             break;
 
                         default:
@@ -76,7 +94,7 @@ namespace Asana
                 }
 
             }
-            while (choiceInt != 5);       
+            while (choiceInt != 6);       
         } 
     }
 }
