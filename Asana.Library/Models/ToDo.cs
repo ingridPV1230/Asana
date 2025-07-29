@@ -16,9 +16,5 @@ namespace Asana.Library.Models
         {
             return $"[{Id}] {Name} - {Description} - ProjectId: {ProjectId}";
         }
-    
-
-
-}
-
+    }
 }
