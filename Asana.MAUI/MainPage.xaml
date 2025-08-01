@@ -1,25 +1,90 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Asana.MAUI.MainPage">
-
     <ScrollView>
-        <CollectionView ItemsSource="{Binding Projects}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <VerticalStackLayout>
-                        <Label Text="{Binding Name}" FontAttributes="Bold" />
-                        <CollectionView ItemsSource="{Binding Todos}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Text="{Binding Title}" />
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </VerticalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </ScrollView>
+        <VerticalStackLayout Padding="20">
+            <HorizontalStackLayout Padding="20" Spacing="30">
+                <!-- Search -->
+                <SearchBar Placeholder="Search projects or todos"
+               Text="{Binding SearchText}"
+               TextChanged="OnSearchTextChanged" 
+               WidthRequest="400"/>
 
+                <!-- Sort -->
+                <Picker Title="Sort By" SelectedIndexChanged="OnSortChanged">
+                    <Picker.Items>
+                        <x:String>Recently Added</x:String>
+                        <x:String>Completion %</x:String>
+                        <x:String>Name (A-Z)</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <!-- Import / Export -->
+                <Button Text="Export Projects" Clicked="OnExportClicked" />
+                <Button Text="Import Projects" Clicked="OnImportClicked" />
+
+                <!-- User -->
+                <Picker Title="Current User" 
+                ItemsSource="{Binding Users}"
+                ItemDisplayBinding="{Binding Username}"
+                SelectedItem="{Binding SelectedUser, Mode=TwoWay}"/>
+
+                <Button Text="Add User" Clicked="OnAddUserClicked" />
+
+            </HorizontalStackLayout>
+
+            <!-- Add new project -->
+            <Button Text="Add Project"
+            Margin="20, 0, 0, 20"
+            Clicked="OnAddProjectClicked"
+            HorizontalOptions="Start"
+            WidthRequest="150"/>
+
+            <CollectionView ItemsSource="{Binding FilteredProjects}" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="10" Margin="0,20,0,0" BackgroundColor="#66000000" CornerRadius="8">
+                            <VerticalStackLayout>
+                                <!-- Project Name / Description / % Completion -->
+                                <HorizontalStackLayout Spacing="10" Padding="0,5">
+                                    <Label FontAttributes="Bold" FontSize="16" Text="{Binding Name}" VerticalOptions="Center" />
+                                    <Button FontSize="12" Text="Delete" Scale="0.9" Clicked="OnDeleteProjectClicked"/>
+                                </HorizontalStackLayout>
+                                <Label FontSize="12" Text="{Binding Description}" TextColor="Gray" />
+                                <Label FontSize="12" Text="{Binding CompletePercent, StringFormat='{}{0:F0}% complete'}"
+                                TextColor="Gray" />
+
+                                <!-- Add ToDo -->
+                                <HorizontalStackLayout Spacing="10" Padding="0,5">
+                                    <Entry x:Name="InlineToDoEntry"
+                                    Placeholder="New ToDo"
+                                    WidthRequest="150"
+                                    FontSize="14"/>
+                                    <Button Text="+" 
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    FontSize="20"
+                                    Clicked="OnAddToDoClicked"
+                                    BindingContext="{Binding}" />
+                                </HorizontalStackLayout>
+
+                                <CollectionView ItemsSource="{Binding ToDos}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <HorizontalStackLayout Spacing="10">
+                                                <CheckBox IsChecked="{Binding IsCompleted}" VerticalOptions="Center"/>
+                                                <Label Text="{Binding Name}" VerticalOptions="Center" />
+                                                <Button Text="Delete" Clicked="OnDeleteToDoClicked" FontSize="12" Scale="0.9"/>
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

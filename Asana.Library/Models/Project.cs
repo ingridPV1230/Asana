@@ -1,21 +1,67 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Asana.Library.Models
 {
-    public class Project
+    public class Project : INotifyPropertyChanged
     {
-        public string? Name { get; set; }  // default public property   
+        public int Id { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public List<ToDo> ToDos { get; set; } = new List<ToDo>();
-        public double CompletePercent { get; set; }
 
-        public int Id { get; set; }
-
-        public override string ToString()
+        private double _completePercent;
+        public double CompletePercent
         {
-            return $"[{Id}] {Name} - {Description} - Completion: {CompletePercent}%";
+            get => _completePercent;
+            set
+            {
+                if (_completePercent != value)
+                {
+                    _completePercent = value;
+                    OnPropertyChanged(nameof(CompletePercent));
+                }
+            }
         }
 
-    }
+        public Project()
+        {
+            ToDos = new List<ToDo>();
+        }
 
+        public void InitializeListeners()
+        {
+            foreach (var todo in ToDos)
+            {
+                todo.PropertyChanged += ToDo_PropertyChanged;
+            }
+        }
+
+        private void ToDo_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ToDo.IsCompleted))
+            {
+                UpdateCompletion();
+            }
+        }
+
+        public void UpdateCompletion()
+        {
+            if (ToDos.Count == 0)
+            {
+                CompletePercent = 0;
+            }
+            else
+            {
+                int completedCount = ToDos.Count(t => t.IsCompleted);
+                CompletePercent = (double)completedCount / ToDos.Count * 100;
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

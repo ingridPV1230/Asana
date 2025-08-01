@@ -1,55 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Asana.Library.Models;
+using Asana.Library.Services;
 
-using Asana.Library.Models;
-
-namespace Asana.Library.Services
+public class ToDoServiceProxy
 {
-    public class ToDoServiceProxy
+    private UserServiceProxy _userService;
+
+    public ToDoServiceProxy()
     {
-        private List<Project> _projects;
+        _userService = new UserServiceProxy();
+    }
 
-        public ToDoServiceProxy()
-        {
-            _projects = new List<Project>
-            {
-                new Project
-                {
-                    Id = 1,
-                    Name = "Project 1",
-                    Description = "Description for Project 1",
-                    ToDos = new List<ToDo>
-                    {
-                        new ToDo { Id = 1, Name = "Task 1", Description = "Description for Task 1", IsCompleted = false, ProjectId = 1 },
-                        new ToDo { Id = 2, Name = "Task 2", Description = "Description for Task 2", IsCompleted = true, ProjectId = 1 }
-                    },
-                    CompletePercent = 50
-                },
-                new Project
-                {
-                    Id = 2,
-                    Name = "Project 2",
-                    Description = "Description for Project 2",
-                    ToDos = new List<ToDo>
-                    {
-                        new ToDo { Id = 3, Name = "Task 3", Description = "Description for Task 3", IsCompleted = false, ProjectId = 2}
-                    },
-                    CompletePercent = 0
-                }
-            };
-        }
-        public List<Project> GetProjects()
-        {
-            return _projects;
-        }
+    public List<Project> GetProjectsForUser(string username)
+    {
+        var user = _userService.GetUserByUsername(username);
+        return user?.Projects ?? new List<Project>();
+    }
 
-        public List<ToDo> GetAllToDos()
-        {
-            return _projects.SelectMany(p => p.ToDos).ToList();
-        }
-
+    public List<ToDo> GetAllToDosForUser(string username)
+    {
+        var projects = GetProjectsForUser(username);
+        return projects.SelectMany(p => p.ToDos).ToList();
     }
 }
